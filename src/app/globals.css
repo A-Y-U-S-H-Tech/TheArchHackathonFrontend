@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-base: #0b0e14;
+  --color-panel: #141925;
+  --color-panel2: #1a2030;
+  --color-border: #1e2433;
+  --color-accent: #00d4b8;
+  --color-accent-dim: #0a8f7c;
+  --color-alert: #ff6b5b;
+  --color-warn: #f5a623;
+  --color-muted: #8b93a7;
+  --color-text: #e7ebf3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--color-base);
+  color: var(--color-text);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3145;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Pipeline rail — the signature motif for complaint progression.         */
+/* Mirrors DAS /agent_steps: Received -> Retrieval -> Triage -> Ticket    */
+/* -> Assigned. Used on complaint detail / progress views.                */
+/* ---------------------------------------------------------------------- */
+
+.pipeline-rail {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  padding: 8px 0;
+}
+
+.pipeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+
+.pipeline-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--color-panel2);
+  border: 2px solid var(--color-border);
+  z-index: 2;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pipeline-node.done .pipeline-dot {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(0, 212, 184, 0.15);
+}
+
+.pipeline-node.active .pipeline-dot {
+  background: var(--color-base);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(0, 212, 184, 0.15);
+  animation: pulse-ring 1.8s ease-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(0, 212, 184, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(0, 212, 184, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 212, 184, 0); }
+}
+
+.pipeline-line {
+  position: absolute;
+  top: 7px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background: var(--color-border);
+  z-index: 1;
+}
+
+.pipeline-node.done .pipeline-line {
+  background: var(--color-accent);
+}
+
+.pipeline-node:first-child .pipeline-line {
+  display: none;
+}
+
+.pipeline-label {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 500;
+  max-width: 110px;
+}
+
+.pipeline-node.done .pipeline-label,
+.pipeline-node.active .pipeline-label {
+  color: var(--color-text);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Agent trace — terminal-style readout of CTAS triage reasoning.         */
+/* ---------------------------------------------------------------------- */
+
+.agent-trace {
+  background: #0a0d13;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.agent-trace-line {
+  display: flex;
+  gap: 10px;
+}
+
+.agent-trace-key {
+  color: var(--color-accent);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.agent-trace-value {
+  color: var(--color-text);
+}
+
+.agent-trace-prompt::before {
+  content: "$ ";
+  color: var(--color-muted);
+}
+
+/* Severity glow utility for badges/cards */
+.severity-glow-high {
+  box-shadow: inset 3px 0 0 0 var(--color-alert);
+}
+.severity-glow-medium {
+  box-shadow: inset 3px 0 0 0 var(--color-warn);
+}
+.severity-glow-low {
+  box-shadow: inset 3px 0 0 0 var(--color-accent);
+}
+
+.bg-grid {
+  background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media (max-width: 880px) {
+  .hidden-mobile-panel {
+    display: none !important;
+  }
+}
