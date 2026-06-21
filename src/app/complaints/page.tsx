@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { Table, Card, Typography, Button, Input } from "antd";
+import type { Breakpoint } from "antd/es/_util/responsiveObserver";
+import type { ColumnsType } from "antd/es/table";
 import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { ProtectedPage } from "@/components/ProtectedPage";
@@ -35,6 +37,19 @@ export default function ComplaintsPage() {
       c.CDES.toLowerCase().includes(search.toLowerCase()) ||
       c.CUS.toLowerCase().includes(search.toLowerCase())
   );
+
+  const md: Breakpoint[] = ["md"];
+  const sm: Breakpoint[] = ["sm"];
+
+  const columns: ColumnsType<Complaint> = [
+    { title: "ID", dataIndex: "CID", key: "CID", render: (v) => <span className="mono">{v}</span> },
+    ...(isCustomer ? [] : [{ title: "Customer", dataIndex: "CUS", key: "CUS", responsive: md }]),
+    { title: "Product", dataIndex: "PID", key: "PID", responsive: md, render: (v: string) => <span className="mono">{v}</span> },
+    { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true, responsive: sm },
+    { title: "Severity", dataIndex: "CSEV", key: "CSEV", render: (v) => <SeverityTag severity={v} /> },
+    { title: "Status", dataIndex: "CST", key: "CST", render: (v) => <StatusTag status={v} /> },
+    { title: "Date", dataIndex: "CDT", key: "CDT", responsive: md },
+  ];
 
   return (
     <ProtectedPage>
@@ -72,15 +87,7 @@ export default function ComplaintsPage() {
             rowKey="CID"
             scroll={{ x: "max-content" }}
             onRow={(record) => ({ onClick: () => router.push(`/complaints/${record.CID}`), style: { cursor: "pointer" } })}
-            columns={[
-              { title: "ID", dataIndex: "CID", key: "CID", render: (v) => <span className="mono">{v}</span> },
-              ...(isCustomer ? [] : [{ title: "Customer", dataIndex: "CUS", key: "CUS", responsive: ["md"] as const }]),
-              { title: "Product", dataIndex: "PID", key: "PID", responsive: ["md"] as const, render: (v: string) => <span className="mono">{v}</span> },
-              { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true, responsive: ["sm"] as const },
-              { title: "Severity", dataIndex: "CSEV", key: "CSEV", render: (v) => <SeverityTag severity={v} /> },
-              { title: "Status", dataIndex: "CST", key: "CST", render: (v) => <StatusTag status={v} /> },
-              { title: "Date", dataIndex: "CDT", key: "CDT", responsive: ["md"] as const },
-            ]}
+            columns={columns}
           />
         )}
       </Card>
