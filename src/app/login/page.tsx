@@ -65,7 +65,7 @@ export default function LoginPage() {
         >
           FO
         </div>
-        <Title className="font-display" style={{ color: COLORS.text, fontSize: 42, marginBottom: 12, maxWidth: 520 }}>
+        <Title className="font-display hero-title" style={{ color: COLORS.text, marginBottom: 12, maxWidth: 520 }}>
           FMCG Operations Copilot
         </Title>
         <Text style={{ color: COLORS.muted, fontSize: 16, maxWidth: 480, lineHeight: 1.7 }}>
@@ -87,6 +87,7 @@ export default function LoginPage() {
 
       {/* Right form panel */}
       <div
+        className="login-form-panel"
         style={{
           flex: 1,
           maxWidth: 480,
@@ -94,6 +95,7 @@ export default function LoginPage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "48px 56px",
+          width: "100%",
         }}
       >
         <Title level={2} className="font-display" style={{ color: COLORS.text, marginBottom: 4 }}>
@@ -121,10 +123,10 @@ export default function LoginPage() {
 
         <Form layout="vertical" onFinish={onFinish} requiredMark={false} size="large">
           <Form.Item name="NAM" label="Username" rules={[{ required: true, message: "Username is required" }]}>
-            <Input prefix={<UserOutlined style={{ color: COLORS.muted }} />} placeholder="your.username" />
+            <Input prefix={<UserOutlined style={{ color: COLORS.muted }} />} placeholder="for testing tester" />
           </Form.Item>
           <Form.Item name="PAS" label="Password" rules={[{ required: true, message: "Password is required" }]}>
-            <Input.Password prefix={<LockOutlined style={{ color: COLORS.muted }} />} placeholder="••••••••" />
+            <Input.Password prefix={<LockOutlined style={{ color: COLORS.muted }} />} placeholder="pass for testing tester123" />
           </Form.Item>
           <Button type="primary" htmlType="submit" block loading={loading} style={{ marginTop: 8, height: 44, fontWeight: 700 }}>
             Sign in

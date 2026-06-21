@@ -6,6 +6,7 @@ export interface CreateTicketPayload {
   PRI: string;
   DEP: string;
   DES: string;
+  ITO?: boolean;
 }
 
 export const TgsApi = {

@@ -106,11 +106,12 @@ function SupervisorDashboard() {
             dataSource={recent.data ?? []}
             rowKey="CID"
             pagination={false}
+            scroll={{ x: "max-content" }}
             onRow={(record) => ({ onClick: () => router.push(`/complaints/${record.CID}`), style: { cursor: "pointer" } })}
             columns={[
               { title: "ID", dataIndex: "CID", key: "CID", render: (v) => <span className="mono">{v}</span> },
-              { title: "Customer", dataIndex: "CUS", key: "CUS" },
-              { title: "Product", dataIndex: "PID", key: "PID", render: (v) => <span className="mono">{v}</span> },
+              { title: "Customer", dataIndex: "CUS", key: "CUS", responsive: ["sm"] as const },
+              { title: "Product", dataIndex: "PID", key: "PID", responsive: ["md"] as const, render: (v) => <span className="mono">{v}</span> },
               { title: "Severity", dataIndex: "CSEV", key: "CSEV", render: (v) => <SeverityTag severity={v} /> },
               { title: "Status", dataIndex: "CST", key: "CST", render: (v) => <StatusTag status={v} /> },
             ]}
@@ -178,13 +179,14 @@ function CustomerDashboard() {
             dataSource={all.data ?? []}
             rowKey="CID"
             pagination={false}
+            scroll={{ x: "max-content" }}
             onRow={(record) => ({ onClick: () => router.push(`/complaints/${record.CID}`), style: { cursor: "pointer" } })}
             columns={[
               { title: "ID", dataIndex: "CID", key: "CID", render: (v) => <span className="mono">{v}</span> },
-              { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true },
+              { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true, responsive: ["sm"] as const },
               { title: "Severity", dataIndex: "CSEV", key: "CSEV", render: (v) => <SeverityTag severity={v} /> },
               { title: "Status", dataIndex: "CST", key: "CST", render: (v) => <StatusTag status={v} /> },
-              { title: "Date", dataIndex: "CDT", key: "CDT" },
+              { title: "Date", dataIndex: "CDT", key: "CDT", responsive: ["md"] as const },
             ]}
           />
         )}

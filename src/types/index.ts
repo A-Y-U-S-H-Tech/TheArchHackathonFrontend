@@ -33,6 +33,7 @@ export interface Ticket {
   PRI: Priority;
   STA: TicketStatus;
   CRT: string;
+  ITO: boolean;
 }
 
 export interface KnowledgeDocument {
@@ -50,11 +51,57 @@ export interface SessionUser {
   ROL: UserRole;
 }
 
+export interface TriageAnalysis {
+  complaint_id: string;
+  user_name: string;
+  product_id: string;
+  product_name: string;
+  issue_summary: string;
+  classification: string;
+  risk_level: string;
+  reasoning: string;
+}
+
+export interface ToolUsed {
+  tool: string;
+  reason: string;
+}
+
+export interface SampleTicket {
+  TID: string;
+  CID: string;
+  DEP: string;
+  PRI: string;
+  STA: string;
+  DES: string;
+}
+
+export interface ToolTrace {
+  step: number;
+  tool: string;
+  reason: string;
+  observation: string;
+}
+
 export interface TriageResult {
-  category: string;
-  severity: string;
-  department: string;
-  recommended_action: string;
+  triage_analysis: TriageAnalysis;
+  tools_used: ToolUsed[];
+  sample_ticket: SampleTicket;
+  cid: string;
+  complaint_found: boolean;
+  product_found: boolean;
+  complaint: Complaint | Record<string, unknown>;
+  product: Product | Record<string, unknown>;
+  retrieval: {
+    query: string;
+    retrieved_context: string;
+  };
+  triage: Record<string, unknown>;
+  ticket: {
+    should_create: boolean;
+    reason: string;
+  };
+  tool_trace: ToolTrace[];
 }
 
 export interface DashboardOverview {

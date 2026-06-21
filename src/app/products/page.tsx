@@ -92,11 +92,12 @@ export default function ProductsPage() {
             loading={products.loading}
             dataSource={products.data ?? []}
             rowKey="PID"
+            scroll={{ x: "max-content" }}
             columns={[
               { title: "ID", dataIndex: "PID", key: "PID", render: (v) => <span className="mono">{v}</span> },
               { title: "Name", dataIndex: "PNM", key: "PNM" },
-              { title: "Category", dataIndex: "PCAT", key: "PCAT" },
-              { title: "Description", dataIndex: "PDES", key: "PDES", ellipsis: true },
+              { title: "Category", dataIndex: "PCAT", key: "PCAT", responsive: ["md"] as const },
+              { title: "Description", dataIndex: "PDES", key: "PDES", ellipsis: true, responsive: ["md"] as const },
               {
                 title: "Status",
                 dataIndex: "PSTA",

@@ -1,18 +1,54 @@
 # FMCG Operations Copilot — Frontend
 
 Next.js 14 (App Router) + TypeScript + Ant Design (dark theme) frontend for the FMCG Operations
-Copilot backend (FastAPI monolith). Built for Vercel deployment.
+Copilot backend (FastAPI monolith). Built for Vercel deployment, designed for a hackathon demo.
 
-## Roles supported
+## What this is
 
-- **Customer (CUS)** — file complaints, track their own complaint history and resolution progress.
-- **Customer Service Executive (CSE)** — view all complaints, run AI triage, manage tickets.
-- **Supervisor (SUP)** — everything CSE can do, plus manage the product catalog and knowledge base
-  documents that ground the RAG/triage agent.
+An AI-assisted complaint-handling system for an FMCG (consumer packaged goods) business. Customers
+file complaints about products; an AI triage agent reasons through the complaint against SOPs and
+past cases, classifies severity, and drafts a ticket; staff review the AI's reasoning, accept or
+edit the ticket, route it to a department, and close the loop back to the customer.
 
-The backend's `AMS/login` response (per the design doc) doesn't return a role, so the login screen
-asks which role you're signing in as. This only controls which nav items/pages render client-side —
-the backend's own auth/role checks on each endpoint remain the real security boundary.
+## Roles
+
+- **Customer (CUS)** — files complaints, tracks pipeline progress, sees a "Final Update" once staff
+  close out the case.
+- **Customer Service Executive (CSE)** — views all complaints, runs AI triage, creates/manages
+  tickets, updates complaint status.
+- **Supervisor (SUP)** — everything CSE can do, plus manages the product catalog, the knowledge
+  base that grounds the AI, and Customer Service Executive accounts.
+
+The backend's `AMS/login` response doesn't return a role (per the design doc), so the login screen
+asks which role you're signing in as. This only controls which nav items render client-side — the
+backend's own auth/role checks on each endpoint remain the real security boundary.
+
+## Demo flow (suggested order for judges)
+
+1. **Sign up** as a Customer, **file a complaint** against a product (`/complaints/new`).
+2. **Log in as a Supervisor**, create a Service Executive account (`/accounts`).
+3. **Log in as that Service Executive**, open the complaint, **Run AI Triage** — watch the
+   ChatGPT/Claude-style "thinking" animation, then expand the collapsed reasoning trace to see each
+   tool call the agent made.
+4. **Accept or edit** the AI's suggested ticket, optionally mark it **Internal Only**, and create it.
+5. **Update the complaint status** (Update Status button) — this is what signals "staff have made a
+   final call on this complaint."
+6. **Switch back to the Customer** — the complaint now shows a **Final Update** card surfacing the
+   last ticket's outcome, instead of raw operational ticket data.
+7. As Supervisor, check `/products`, `/knowledge`, and `/dashboard` for the rest of the surface area.
+
+## Key design touches
+
+- Dark, bold SaaS aesthetic: near-black base (`#0B0E14`), teal-green accent (`#00D4B8`) signaling
+  "quality/verified," coral (`#FF6B5B`) for high severity.
+- A **pipeline rail** (customer-only) visualizes complaint progress through the backend's own agent
+  steps (Received → Retrieval → Triage → Ticket → Resolved).
+- A **thinking panel** mimics Claude/ChatGPT's reasoning UX: an animated "Thinking…" state while
+  triage runs, collapsing into an expandable step-by-step trace once it completes.
+- A **suggested ticket panel** lets staff accept the AI's ticket as-is or edit fields before sending,
+  with an always-available Internal Only toggle.
+- Fully responsive: off-canvas drawer nav on mobile, scrollable/column-hiding tables, modals capped
+  to viewport width.
 
 ## Configuring the backend connection
 
@@ -39,9 +75,7 @@ NEXT_PUBLIC_API_BASE_URL=https://api.yourbackend.com
 ```
 
 These are `NEXT_PUBLIC_*` variables, which Next.js inlines into the JS bundle at **build time**.
-That means:
-- Changing them requires a rebuild (just re-running `npm run build`, or redeploying on Vercel).
-- They're visible in client-side code — fine here since they're just a host/port, not a secret.
+Changing them requires a rebuild (or a redeploy on Vercel).
 
 ## Local development
 
@@ -75,6 +109,15 @@ browsers will block the requests as mixed content. Either put the backend behind
 reverse proxy or tunnel like ngrok/Cloudflare Tunnel for a hackathon demo), or run the frontend
 locally over HTTP during the demo.
 
+## Known gaps (by design, not oversight)
+
+- **No account directory**: the backend doesn't expose a "list all users" endpoint, so
+  `/accounts` (Supervisor account management) is username-driven rather than browsed from a table.
+- **No account deletion**: the system overview lists "Delete" as a conceptual AMS capability, but
+  no route is documented for it — the UI shows this control disabled with an explanatory tooltip
+  rather than calling an endpoint that doesn't exist.
+- **Role isn't returned by login**: handled via a role selector at sign-in (see Roles above).
+
 ## Project structure
 
 ```
@@ -82,31 +125,23 @@ src/
   app/                  Next.js App Router pages
     login/
     signup/
+    account/             Self-service account settings (all roles)
+    accounts/            Supervisor-only account management (create/manage CSE accounts)
     dashboard/
     complaints/
-      [id]/
+      [id]/                Status updates, AI triage, ticket creation, final update reveal
       new/
     tickets/
       [id]/
     knowledge/
     products/
-  components/           Shared UI: AppShell, ProtectedPage, PipelineRail, AgentTrace, tags
+  components/           Shared UI: AppShell, ProtectedPage, PipelineRail, ThinkingTrace,
+                         SuggestedTicketPanel, tags, state banners
   context/              AuthContext (session state)
   lib/
     api/                One module per backend system (ams, cms, pms, pkms, tgs, misc)
-    apiClient.ts         fetch wrapper (cookie auth, error normalization)
-    config.ts            env-var -> base URL resolution
-    theme.ts              Ant Design theme tokens
+    apiClient.ts          fetch wrapper (cookie auth, error normalization)
+    config.ts              env-var -> base URL resolution
+    theme.ts                Ant Design theme tokens
   types/                 Shared TS types mirroring backend entities
-
 ```
-
-## Design notes
-
-- Dark, bold SaaS aesthetic: near-black base (`#0B0E14`), teal-green accent (`#00D4B8`) signaling
-  "quality/verified," coral (`#FF6B5B`) for high severity.
-- A **pipeline rail** component visualizes each complaint's progress through the backend's own
-  agent steps (Received → Retrieval → Triage → Ticket → Resolved).
-- An **agent trace** panel renders CTAS triage output in a terminal/log style, making the AI's
-  reasoning inspectable rather than a black box.
-# TheArchHackathonFrontend

@@ -9,8 +9,17 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "FMCG Operations Copilot",
-  description: "AI-powered complaint triage, ticketing, and analytics for FMCG operations.",
+  title: {
+    default: "FMCG Operations Copilot",
+    template: "%s · FMCG Operations Copilot",
+  },
+  description: "AI-triaged complaint intake, knowledge retrieval, and ticket automation for FMCG operations.",
+  themeColor: "#0B0E14",
+  openGraph: {
+    title: "FMCG Operations Copilot",
+    description: "AI-triaged complaint intake, knowledge retrieval, and ticket automation for FMCG operations.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

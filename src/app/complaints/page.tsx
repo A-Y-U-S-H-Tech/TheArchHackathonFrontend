@@ -70,15 +70,16 @@ export default function ComplaintsPage() {
             loading={complaints.loading}
             dataSource={filtered}
             rowKey="CID"
+            scroll={{ x: "max-content" }}
             onRow={(record) => ({ onClick: () => router.push(`/complaints/${record.CID}`), style: { cursor: "pointer" } })}
             columns={[
               { title: "ID", dataIndex: "CID", key: "CID", render: (v) => <span className="mono">{v}</span> },
-              ...(isCustomer ? [] : [{ title: "Customer", dataIndex: "CUS", key: "CUS" }]),
-              { title: "Product", dataIndex: "PID", key: "PID", render: (v: string) => <span className="mono">{v}</span> },
-              { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true },
+              ...(isCustomer ? [] : [{ title: "Customer", dataIndex: "CUS", key: "CUS", responsive: ["md"] as const }]),
+              { title: "Product", dataIndex: "PID", key: "PID", responsive: ["md"] as const, render: (v: string) => <span className="mono">{v}</span> },
+              { title: "Description", dataIndex: "CDES", key: "CDES", ellipsis: true, responsive: ["sm"] as const },
               { title: "Severity", dataIndex: "CSEV", key: "CSEV", render: (v) => <SeverityTag severity={v} /> },
               { title: "Status", dataIndex: "CST", key: "CST", render: (v) => <StatusTag status={v} /> },
-              { title: "Date", dataIndex: "CDT", key: "CDT" },
+              { title: "Date", dataIndex: "CDT", key: "CDT", responsive: ["md"] as const },
             ]}
           />
         )}

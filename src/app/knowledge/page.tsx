@@ -82,13 +82,15 @@ export default function KnowledgePage() {
             loading={docs.loading}
             dataSource={docs.data ?? []}
             rowKey="DID"
+            scroll={{ x: "max-content" }}
             columns={[
-              { title: "ID", dataIndex: "DID", key: "DID", render: (v) => <span className="mono">{v}</span> },
+              { title: "ID", dataIndex: "DID", key: "DID", responsive: ["md"] as const, render: (v) => <span className="mono">{v}</span> },
               { title: "Name", dataIndex: "DNM", key: "DNM" },
               {
                 title: "Type",
                 dataIndex: "DTYPE",
                 key: "DTYPE",
+                responsive: ["sm"] as const,
                 render: (v) => <Tag style={{ background: COLORS.panel2, color: COLORS.accent, border: "none" }} className="mono">{v}</Tag>,
               },
               {

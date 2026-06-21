@@ -7,14 +7,16 @@ export interface PipelineStep {
 
 export function PipelineRail({ steps }: { steps: PipelineStep[] }) {
   return (
-    <div className="pipeline-rail">
-      {steps.map((step, idx) => (
-        <div key={idx} className={`pipeline-node ${step.status}`}>
-          <div className="pipeline-line" />
-          <div className="pipeline-dot" />
-          <div className="pipeline-label">{step.label}</div>
-        </div>
-      ))}
+    <div className="pipeline-rail-scroll">
+      <div className="pipeline-rail">
+        {steps.map((step, idx) => (
+          <div key={idx} className={`pipeline-node ${step.status}`}>
+            <div className="pipeline-line" />
+            <div className="pipeline-dot" />
+            <div className="pipeline-label">{step.label}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
